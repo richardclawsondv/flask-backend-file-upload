@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, session
+from flask import Flask, request, session, jsonify
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import logging
@@ -26,11 +26,11 @@ def fileUpload():
     file.save(destination)
     session['uploadFilePath'] = destination
     try:
-    	response = "Success!"
+    	response = {'status' : "Success!"}
     except Exception as e:
-    	response = "Error occured!"
+    	response = {'status': "Error occured!"}
     	
-    return response
+    return jsonify(response)
 
 
 if __name__ == "__main__":
