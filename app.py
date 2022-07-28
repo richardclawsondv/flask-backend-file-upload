@@ -30,7 +30,7 @@ def fileUpload():
         session['uploadFilePath'] = destination
         num_lines = sum(1 for line in open(destination))
         response = {
-            'status' : num_lines + " wallet addresses are in qeuee to check the balances"
+            'status' : str(num_lines) + " wallet addresses are in qeuee to check the balances"
         }
 
         result = subprocess.check_output("nohup python3 /var/www/flask-backend-file-upload/getBtcBalance.py " + filename + " &", shell=True)
