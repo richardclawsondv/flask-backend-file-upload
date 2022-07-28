@@ -5,7 +5,7 @@ from moneywagon import AddressBalance
 import time
 
 API = "https://blockchain.info/q/addressbalance/"
-PATH = "/var/www/flask-backend-file-upload/uploads/BTC Private Key WIF.txt"
+PATH = "/var/www/flask-backend-file-upload/uploads/test/BTC_Private_Key_WIF.txt"
 
 keys = [
     '5KAtcGTiTHUwtQmk4sCa7a8NWQvdJLhNaPck3srdNir89A6Y5VD',
