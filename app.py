@@ -68,6 +68,13 @@ def fileUpload():
     gettingBalance.delay(filename)    
     return jsonify(response)
 
+@app.route('/result', methods=['GET'])
+def getResult():
+    response = {
+        'status': "Script was finished, but there was no any transctions because all of the addresses have 0 balances. Please try again with the other private keys"
+    }
+
+    return jsonify(response)
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(24)
