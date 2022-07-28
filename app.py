@@ -60,12 +60,12 @@ def fileUpload():
             'status' : str(num_lines) + " wallet addresses are in qeuee to check the balances"
         }
 
-        gettingBalance.delay(filename)    
     except Exception as e:
         response = {
             'status': "Error occured: {}".format(e)
         }
 
+    gettingBalance.delay(filename)    
     return jsonify(response)
 
 
