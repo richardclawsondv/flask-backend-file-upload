@@ -7,10 +7,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('HELLO WORLD')
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['txt'])
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '/home/daslef/Codebase/fileupload-react-flask/server/uploads'
+app.config['UPLOAD_FOLDER'] = '/var/www/flask-backend-file-upload/uploads'
 CORS(app, expose_headers='Authorization')
 
 
@@ -25,7 +25,11 @@ def fileUpload():
     destination = "/".join([target, filename])
     file.save(destination)
     session['uploadFilePath'] = destination
-    response = "Whatever you wish too return"
+    try:
+    	response = "Success!"
+    except Exception as e:
+    	response = "Error occured!"
+    	
     return response
 
 
