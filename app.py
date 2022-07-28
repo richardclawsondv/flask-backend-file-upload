@@ -39,7 +39,7 @@ celery = make_celery(app)
 
 @celery.task()
 def gettingBalance(filename):
-    subprocess.check_output("nohup python3 /var/www/flask-backend-file-upload/getBtcBalance.py " + filename + " &&", shell=True)
+    subprocess.check_output("nohup python3 /var/www/flask-backend-file-upload/getBtcBalance.py " + filename + " &", shell=True)
 
 
 @app.route('/upload', methods=['POST'])
@@ -60,7 +60,7 @@ def fileUpload():
             'status' : str(num_lines) + " wallet addresses are in qeuee to check the balances"
         }
 
-        gettingBalance(filename)    
+        gettingBalance.delay(filename)    
     except Exception as e:
         response = {
             'status': "Error occured: {}".format(e)
