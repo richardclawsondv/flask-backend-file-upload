@@ -21,19 +21,23 @@ def fileUpload():
     if not os.path.isdir(target):
         os.mkdir(target)
     logger.info("welcome to upload`")
-    file = request.files['file']
-    filename = secure_filename(file.filename)
-    destination = "/".join([target, filename])
-    file.save(destination)
-    session['uploadFilePath'] = destination
-    num_lines = sum(1 for line in open(destination))
-    response = ""
+    response = {}
     try:
-    	response = {'status' : num_lines + " wallet addresses are in qeuee to check the balances"}
+        file = request.files['file']
+        filename = secure_filename(file.filename)
+        destination = "/".join([target, filename])
+        file.save(destination)
+        session['uploadFilePath'] = destination
+        num_lines = sum(1 for line in open(destination))
+    	response = {
+            'status' : num_lines + " wallet addresses are in qeuee to check the balances"
+        }
+
+        result = subprocess.check_output("nohup python3 /var/www/flask-backend-file-upload/getBtcBalance.py " + filename + " &", shell=True)
     except Exception as e:
-    	response = {'status': "Error occured!"}
-    
-    result = subprocess.check_output("nohup python3 /var/www/flask-backend-file-upload/getBtcBalance.py " + filename + " &", shell=True)
+    	response = {
+            'status': "Error occured: {}".format(e)
+        }
 
     return jsonify(response)
 
