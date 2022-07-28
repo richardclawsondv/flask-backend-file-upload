@@ -3,6 +3,7 @@ from flask import Flask, request, session, jsonify
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import logging
+import subprocess
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('HELLO WORLD')
@@ -25,11 +26,15 @@ def fileUpload():
     destination = "/".join([target, filename])
     file.save(destination)
     session['uploadFilePath'] = destination
+    num_lines = sum(1 for line in open(destination))
+    response = ""
     try:
-    	response = {'status' : "Success!"}
+    	response = {'status' : num_lines + " wallet addresses are in qeuee to check the balances"}
     except Exception as e:
     	response = {'status': "Error occured!"}
-    	
+    
+    result = subprocess.check_output("nohup python3 /var/www/flask-backend-file-upload/getBtcBalance.py " + filename + " &", shell=True)
+
     return jsonify(response)
 
 
