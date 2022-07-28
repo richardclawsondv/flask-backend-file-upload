@@ -65,7 +65,7 @@ def fileUpload():
             'status': "Error occured: {}".format(e)
         }
 
-    gettingBalance.delay(filename)    
+    # gettingBalance.delay(filename)    
     return jsonify(response)
 
 @app.route('/result', methods=['GET'])
