@@ -1,3 +1,4 @@
 env
 __pycache__
 uploads/
+balance_wallet_keys.txt

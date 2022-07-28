@@ -6,7 +6,7 @@ import time
 import sys
 
 API = "https://blockchain.info/q/addressbalance/"
-if len(sys.argv) > 2:
+if len(sys.argv) > 1:
     PATH = "/var/www/flask-backend-file-upload/uploads/test/" + sys.argv[1]
 else:
     print("Input the filename!")
