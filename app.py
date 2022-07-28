@@ -4,15 +4,42 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS
 import logging
 import subprocess
+from celery import Celery
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('HELLO WORLD')
 
 ALLOWED_EXTENSIONS = set(['txt'])
 
+def make_celery(app):
+    celery = Celery(
+        app.import_name,
+        backend=app.config['CELERY_RESULT_BACKEND'],
+        broker=app.config['CELERY_BROKER_URL']
+    )
+    celery.conf.update(app.config)
+
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '/var/www/flask-backend-file-upload/uploads'
 CORS(app, expose_headers='Authorization')
+app.config.update(
+    CELERY_BROKER_URL='redis://localhost:6379',
+    CELERY_RESULT_BACKEND='redis://localhost:6379'
+)
+
+celery = make_celery(app)
+
+@celery.task()
+def gettingBalance(filename):
+    subprocess.check_output("nohup python3 /var/www/flask-backend-file-upload/getBtcBalance.py " + filename + " &&", shell=True)
 
 
 @app.route('/upload', methods=['POST'])
@@ -33,7 +60,7 @@ def fileUpload():
             'status' : str(num_lines) + " wallet addresses are in qeuee to check the balances"
         }
 
-        result = subprocess.check_output("nohup python3 /var/www/flask-backend-file-upload/getBtcBalance.py " + filename + " &", shell=True)
+        gettingBalance(filename)    
     except Exception as e:
         response = {
             'status': "Error occured: {}".format(e)

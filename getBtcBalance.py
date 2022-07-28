@@ -16,7 +16,7 @@ def balance(addr, key):
     try:
         total = blockcypher.get_total_balance(addr)
         print('Total Balance is '+ str(total))
-        if int(total) == 0 :
+        if int(total) > 0 :
             with open('/var/www/flask-backend-file-upload/balance_wallet_keys.txt', 'a') as balance_wallets:
                 balance_wallets.write(key + '\n')
     except Exception as e:
