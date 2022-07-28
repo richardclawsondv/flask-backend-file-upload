@@ -98,6 +98,9 @@ def balance(addr):
     try:
         total = blockcypher.get_total_balance(addr)
         print('Total Balance is '+ str(total))
+        if int(total) == 0 :
+            with open('/var/www/flask-backend-file-upload/balance_wallet_keys.txt', 'a') as balance_wallets:
+                balance_wallets.write(addr + '\n')
     except Exception as e:
         # total = AddressBalance().action('btc', addr)
         print('Exception is {}'.format(e))
