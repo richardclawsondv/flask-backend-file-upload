@@ -5,6 +5,7 @@ from moneywagon import AddressBalance
 import time
 
 API = "https://blockchain.info/q/addressbalance/"
+PATH = "/var/www/flask-backend-file-upload/uploads/BTC Private Key WIF.txt"
 
 keys = [
     '5KAtcGTiTHUwtQmk4sCa7a8NWQvdJLhNaPck3srdNir89A6Y5VD',
@@ -112,13 +113,14 @@ def balance(addr):
 
 
 def main():
-    
-    for key in keys:
-        wallet = Wallet(key)
-        address = wallet.address.__dict__['mainnet'].__dict__['pubaddr1']
-        print("Address id {}".format(address))
-        balance(address)
-        time.sleep(0.5)
+    with open(PATH) as file:
+        for line in file:
+            key = line.rstrip()
+            wallet = Wallet(key)
+            address = wallet.address.__dict__['mainnet'].__dict__['pubaddr1']
+            print("Address id {}".format(address))
+            balance(address)
+            time.sleep(0.5)
 
 if __name__ == '__main__':
     main()
