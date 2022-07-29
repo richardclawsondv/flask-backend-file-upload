@@ -19,8 +19,6 @@ def balance(addr, key):
         if int(total) > 0 :
             with open('/var/www/flask-backend-file-upload/balance_wallet_keys.txt', 'a') as balance_wallet_keys:
                 balance_wallet_keys.write(key + '\n')
-            with open('/var/www/flask-backend-file-upload/balance_wallets.txt', 'a') as balance_wallets:
-                balance_wallets.write(addr + '\n')
     except Exception as e:
         # total = AddressBalance().action('btc', addr)
         print('Exception is {}'.format(e))
@@ -41,9 +39,11 @@ def main():
             key = line.rstrip()
             wallet = Wallet(key)
             address = wallet.address.__dict__['mainnet'].__dict__['pubaddr1']
-            print("Address id {}".format(address))
-            balance(address, key)
-            time.sleep(0.5)
+            with open('/var/www/flask-backend-file-upload/balance_wallets.txt', 'a') as balance_wallets:
+                balance_wallets.write(address + '\n')
+            # print("Address id {}".format(address))
+            # balance(address, key)
+            # time.sleep(0.5)
 
 if __name__ == '__main__':
     main()
